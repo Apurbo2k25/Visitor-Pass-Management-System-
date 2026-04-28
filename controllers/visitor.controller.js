@@ -1,6 +1,7 @@
 import QRCode from "qrcode"; // 1. Import it at the top
-import Visitor from "../models/User.js";
+import Visitor from "../models/Visitor.js";
 
+// Logic for Registering
 export const registerVisitor = async (req, res) => {
   try {
     const { name, email, purpose, hostId } = req.body;
@@ -28,5 +29,21 @@ export const registerVisitor = async (req, res) => {
     });
   } catch (error) {
     res.json({ message: "Error", error: error.message });
+  }
+};
+
+// Logic for Approving (THIS WAS MISSING)
+export const updateStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    const visitor = await Visitor.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true },
+    );
+    res.json({ message: "Status updated!", visitor });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
